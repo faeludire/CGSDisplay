@@ -132,8 +132,6 @@ public class DisplayControl extends AppCompatActivity {
         infoTextView = (TextView) findViewById(R.id.infoTextView);
         sendToDisplayButton = (Button) findViewById(R.id.sendToDispButton);
 
-
-        isCGSMode = true;
         cgsRadioButton.setChecked(isCGSMode);
 
         hNumber.setMaxValue(7);
@@ -192,9 +190,21 @@ public class DisplayControl extends AppCompatActivity {
                     int number = hNumber.getValue() *100 + tNumber.getValue() * 10 + uNumber.getValue();
                     updateInfoTextView();
 
-                    String selectedHymnAndModeString = "";
+                    String selectedHymnAndModeString;
 
                     selectedHymnAndModeString = Integer.toString(number);
+
+                    if (number < 100)
+                    {
+                        selectedHymnAndModeString = "0" +selectedHymnAndModeString;
+
+                        if (number < 10)
+                        {
+                            selectedHymnAndModeString = "0" + selectedHymnAndModeString;
+                        }
+                    }
+
+
 
                     if (isCGSMode) {
                         selectedHymnAndModeString = selectedHymnAndModeString + "1";
@@ -305,7 +315,8 @@ public class DisplayControl extends AppCompatActivity {
         {
             try
             {
-                btSocket.getOutputStream().write(numberToDisplay.toString().getBytes());
+                btSocket.getOutputStream().write(numberToDisplay.getBytes());
+                Log.i("INFORMATION", "writing " + numberToDisplay.getBytes() + "to your Display Module");
             }
             catch (IOException e)
             {
